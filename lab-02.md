@@ -86,7 +86,7 @@ Le violin plot met en évidence les formes de distributions différentes
 selon les continents: l’Afrique et l’Asie sont très concentrés vers le
 bas (faible production de déchets), alors que l’Europe et l’Amerique du
 Nord sont plus dispersées et montent vers le haut. quant au boxplot, il
-resume bien statisquement. il revele que la médiane de l’Afrique est
+resume bien statisquement. Il revele que la médiane de l’Afrique est
 plus basse que celle de l’Europe et de l’Amérique du Nord.
 
 ### Exercise 4
@@ -101,9 +101,9 @@ ggplot(plastic_waste,
 ![](lab-02_files/figure-gfm/plastic-waste-mismanaged-1.png)<!-- -->
 
 La relation entre la quantité de dechets et la quantité de déchets non
-gérés est positive. quand la quantité de dechets plastiques augmente, la
+gérés est positive. Quand la quantité de dechets plastiques augmente, la
 quantité de déchets plastiques non gérés a tendance à augmenter aussi.
-cependant, la relation n’est pas parfaitement linéaire. certains pays,
+Cependant, la relation n’est pas parfaitement linéaire. Certains pays,
 l’Afrique et l’Asie produisent peu de dechets mais les gèrent mal.
 Tanadis que, les autres produisent assez, mais les gèrent bien.
 
@@ -129,7 +129,7 @@ ggplot(plastic_waste,
 ![](lab-02_files/figure-gfm/plastic-waste-population-coastal-1.png)<!-- -->
 
 Il n’existe pas de relation forte entre la quantité de déchets
-plastiques par habitant et le nombre d’habitants (total ou cotiers). les
+plastiques par habitant et le nombre d’habitants (total ou cotiers). Les
 deux nuages de points montrent une dispersion sans tendance, donc aucune
 des deux relations n’est plus forte que l’autre.
 
@@ -138,5 +138,31 @@ des deux relations n’est plus forte que l’autre.
 Recréez la visualisation:
 
 ``` r
-# insert code here
+ plastic_waste_coastal <- plastic_waste %>% 
+  mutate(coastal_pop_prop = coastal_pop / total_pop) %>%
+  filter(plastic_waste_per_cap < 3)
+ggplot(plastic_waste_coastal,
+       aes(x = coastal_pop_prop, y = plastic_waste_per_cap, color = continent)) +
+  geom_point() +
+  geom_smooth(method = loess, se = TRUE,  color = "black") +
+  labs(title = "Quantité de déchets plastiques Vs Proportion de la population côtière",
+       subtitle = "selon le continent", x = "Proportion de la population côtière (Coastal/ total population)",
+       y = "nombre de déchets plastiques par habitant",
+       color = "Continent")
 ```
+
+    ## `geom_smooth()` using formula = 'y ~ x'
+
+    ## Warning: Removed 10 rows containing non-finite outside the scale range
+    ## (`stat_smooth()`).
+
+    ## Warning: Removed 10 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
+![](lab-02_files/figure-gfm/recreate-viz-1.png)<!-- -->
+
+On observe une légère tendance à la hausse de ls quantité de déchets
+plastiques par habitant lorsque la Proportion de la population côtière
+augmente, mais cette relation reste faible. La courbe se stabilise puis
+diminue légèrement, ce qui montre que la proportion de population
+côtière n’explique pas à elle seule la production de déchets plastiques.
